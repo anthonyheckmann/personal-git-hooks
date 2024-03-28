@@ -2,6 +2,7 @@
 # pre-commit hook to increment the version number in a Python file
 
 # make sure the script fails on any error
+set -x
 set -e
 set -o pipefail
 
@@ -24,7 +25,7 @@ files=$(git diff --cached --name-only -- '*.py' | xargs grep -l '__version__ =')
 
 for file in $files; do
     # Get the current version from the file
-    version=$(grep -oP '(?<=__version__ = ")[^"]*' "$file")
+    version=$(grep -oP "(?<=__version__ = [\"\'])[^\"\']*" "$file")
     echo "Current version in $file is $version"
     # Split the version into an array
     IFS='.' read -ra version_parts <<<"$version"
